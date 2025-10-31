@@ -150,7 +150,7 @@ class ReadOnlyStaffPollsTest(StaticLiveServerTestCase):
         self.selenium.find_element(By.NAME, "_save").click()
         self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "li.success")))
 
-        # 2) Grupo + usuario staff (solo lectura) por ORM
+        # 2) Grupo + usuario staff 
         viewers, _ = Group.objects.get_or_create(name="Polls Viewers")
         viewers.permissions.add(
             Permission.objects.get(codename="view_question"),
