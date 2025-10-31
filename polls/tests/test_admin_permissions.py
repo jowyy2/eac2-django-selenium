@@ -57,7 +57,7 @@ class ReadOnlyStaffPollsTest(StaticLiveServerTestCase):
         finally:
             super().tearDownClass()
 
-    # ---------- helpers ----------
+    
     def admin_login(self, username, password):
         self.selenium.get(f"{self.live_server_url}{reverse('admin:login')}")
         self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
@@ -84,23 +84,19 @@ class ReadOnlyStaffPollsTest(StaticLiveServerTestCase):
         """Salir del admin y garantizar que terminamos en la pantalla de login."""
         self.selenium.get(f"{self.live_server_url}/admin/logout/")
 
-        # 1) Si ya vemos el form de login, perfecto.
         try:
             self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
             return
         except Exception:
             pass
 
-        # 2) Si aparece un enlace para volver a iniciar sesión, clicarlo (independiente del idioma)
         links = self.selenium.find_elements(By.CSS_SELECTOR, 'a[href$="/admin/login/"]')
         if links:
             links[0].click()
 
-        # 3) Y si nada de lo anterior, forzar la URL de login.
         if "/admin/login/" not in self.selenium.current_url:
             self.selenium.get(f"{self.live_server_url}/admin/login/")
 
-        # Espera definitiva al campo username.
         self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
 
     def open_questions_changelist(self):
